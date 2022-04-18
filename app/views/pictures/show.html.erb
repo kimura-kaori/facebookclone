@@ -1,3 +1,8 @@
-<h1>詳細画面</h1>
-<p>イメージ: <%= @picture.image %></p>
-<p>内容: <%= @picture.content %></p>
+<h2>詳細をみる。</h2>
+<p>
+  <strong>Image:</strong>
+  <%= image_tag @picture.image.url %>
+</p>
+
+<%= render 'form' %>
+<p id="notice"><%= notice %></p>

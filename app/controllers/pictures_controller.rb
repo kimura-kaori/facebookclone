@@ -1,5 +1,5 @@
 class PicturesController < ApplicationController
-  protect_from_forgery
+  # protect_from_forgery
   before_action :set_picture, only: [:show, :edit, :update, :destroy]
   def index
     @pictures = Picture.all
@@ -27,7 +27,7 @@ class PicturesController < ApplicationController
   end
 
   def update
-    if @picture.update(params.require(:picture).permit(:title, :content))
+    if @picture.update(picture_params)
       redirect_to pictures_path, notice: "編集しました！"
     else
       render :edit
@@ -35,7 +35,7 @@ class PicturesController < ApplicationController
   end
 
   def confirm
-     @picture = Picture.new(params.require(:picture).permit(:title, :content))
+     @picture = current_user.pictures.build(picture_params)
      render :new if @picture.invalid?
   end
 
@@ -50,9 +50,7 @@ class PicturesController < ApplicationController
   end
 
   def picture_params
-    params.require(:picture).permit(:image, :content)
+    params.require(:picture).permit(:image, :image_cache, :content)
   end
-  # def picture_params
-  #   params.require(:picture).permit(:image, :content)
-  # end
+
 end
