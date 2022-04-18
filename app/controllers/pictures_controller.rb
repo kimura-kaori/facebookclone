@@ -1,4 +1,5 @@
 class PicturesController < ApplicationController
+  protect_from_forgery
   before_action :set_picture, only: [:show, :edit, :update, :destroy]
   def index
     @pictures = Picture.all
@@ -9,9 +10,11 @@ class PicturesController < ApplicationController
   end
 
   def create
-    @picture = current_user.pictures.build(image: params[:picture][:image], content: params[:picture][:content])
-    if @picture.save
-      redirect_to pictures_path, notice: "投稿しました！"
+    @picture = current_user.pictures.build(picture_params)
+    if params[:back]
+      render :new
+    elsif @picture.save
+      redirect_to pictures_path, notice: "作成しました！"
     else
       render :new
     end
@@ -31,6 +34,11 @@ class PicturesController < ApplicationController
     end
   end
 
+  def confirm
+     @picture = Picture.new(params.require(:picture).permit(:title, :content))
+     render :new if @picture.invalid?
+  end
+
   def destroy
     @picture.destroy
     redirect_to pictures_path, notice:"削除しました！"
@@ -41,7 +49,9 @@ class PicturesController < ApplicationController
     @picture = Picture.find(params[:id])
   end
 
-
+  def picture_params
+    params.require(:picture).permit(:image, :content)
+  end
   # def picture_params
   #   params.require(:picture).permit(:image, :content)
   # end
