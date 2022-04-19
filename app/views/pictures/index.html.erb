@@ -8,7 +8,7 @@
 
 <% @pictures.each do |picture| %>
   <tr>
-    <td><%= picture.image %></td>
+    <td><%= image_tag (picture.image.url), width: 100 if picture.image && picture.image.url %></td>
     <td><%= picture.content %></td>
     <td><%= link_to '詳細を確認する', picture_path(picture.id) %></td>
     <td><%= link_to '編集する', edit_picture_path(picture.id) %></td>
